@@ -1,0 +1,6 @@
+{{- if .Values.createnamespace -}}
+kind: Namespace
+apiVersion: v1
+metadata:
+   name: monitoring
+{{- end -}}

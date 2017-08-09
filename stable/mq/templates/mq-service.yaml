@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fullname" . }}-service
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  {{- if .Values.mq_service.serviceType }}
+  type: {{ .Values.mq_service.serviceType }}
+  {{- end }}
+  ports:
+    - name: port-1414
+      port: 1414
+      protocol: TCP
+      targetPort: 1414
+      {{- if .Values.mq_service.serviceType }}
+      {{- range $port, $nodeport := .Values.mq_service.nodePortMap }}
+      {{- if eq $port "1414" }}
+      nodePort: {{ $nodeport }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
+    {{- $nodePortMap := .Values.mq_service.nodePortMap }}
+    {{- $serviceType := .Values.mq_service.serviceType }}
+    {{- range .Values.mq_deployment.additional_mqports }}
+    {{- $which_port := . }}
+    - name:  port-{{ . }}
+      port: {{ . }}
+      protocol: TCP
+      targetPort: {{ . }}
+      {{- if $serviceType }}
+      {{- range $port, $nodeport := $nodePortMap }}
+      {{- if eq $port $which_port }}
+      nodePort: {{ $nodeport }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
+    {{- end }}
+    - name:  {{ template "fullname" . }}-web
+      port: 9443
+      protocol: TCP
+      targetPort: 9443
+      {{- if .Values.mq_service.serviceType }}
+      {{- range $port, $nodeport := .Values.mq_service.nodePortMap }}
+      {{- if eq $port "9443" }}
+      nodePort: {{ $nodeport }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
+  selector:
+    name: {{ template "fullname" . }}

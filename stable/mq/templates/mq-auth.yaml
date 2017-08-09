@@ -1,0 +1,24 @@
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1alpha1
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: mq-admin
+rules:
+  - apiGroups: [""] # The API group "" indicates the core API Group.
+    resources: ["*"]
+    verbs: ["*"]
+
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1alpha1
+metadata:
+  name: mq-admin
+  namespace: {{ .Release.Namespace }}
+subjects:
+  - kind: ServiceAccount # May be "User", "Group" or "ServiceAccount"
+    name: {{ .Values.mq_deployment.serviceAccount }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: mq-admin
+  apiGroup: rbac.authorization.k8s.io

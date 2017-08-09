@@ -1,0 +1,13 @@
+# Default values for pgweb
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+pgweb_deployment:
+  # Only one replica allowed
+  replicaCount: 1
+  image:
+    imageName: master.cfc:8500/postgres/pgweb
+    imageTag: latest
+    pullPolicy: Always
+
+pgweb_service:
+  serviceType: NodePort

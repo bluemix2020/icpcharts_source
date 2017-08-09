@@ -1,0 +1,14 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "fullname" . }}-pv-claim
+  annotations: 
+     "volume.{{ .Values.mq_persistence.classVersion }}.kubernetes.io/storage-class": {{ .Values.mq_persistence.class | quote }}
+  labels:
+    type: local
+spec:
+  accessModes:
+    - {{ .Values.mq_persistence.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.mq_persistence.size }}

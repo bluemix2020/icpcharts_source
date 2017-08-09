@@ -1,0 +1,11 @@
+#!/bin/bash
+
+CMD="kubectl get pv"
+PVS="$(${CMD} | grep "pvc-" | awk '{print $1}')"
+echo "PVS: ${PVS}"
+
+for PV in ${PVS}
+do 
+   CMD="kubectl annotate pv ${PV} volume.beta.kubernetes.io/storage-class=fast --overwrite"
+   echo $(${CMD})
+done

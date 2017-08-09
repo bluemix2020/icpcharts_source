@@ -1,0 +1,11 @@
+apiVersion: v1
+name: mq
+description: MQ is IBM's Message Queueing Chart for Kuberenetes.
+version: 0.1.1
+appVersion: 9.0.1.0
+home: https://www.ibm.com/support/knowledgecenter/SSFKSJ_9.0.0/com.ibm.mq.helphome.v90.doc/WelcomePagev9r0.htm
+sources:
+- https://hub.docker.com/r/ibmcom/mq/
+maintainers:
+- name: xxyy
+  email: xxyy@xxyy.com

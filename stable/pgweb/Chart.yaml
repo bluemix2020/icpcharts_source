@@ -1,0 +1,11 @@
+apiVersion: v1
+name: pgweb
+description: pgweb is a web-based Postgres UI.
+version: 0.1.1
+appVersion: 9.0.1.0
+home: https://github.com/sosedoff/pgweb
+sources:
+- https://github.com/sosedoff/pgweb
+maintainers:
+- name: xxyy
+  email: xxyy@xxyy.com

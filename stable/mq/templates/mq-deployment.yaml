@@ -1,0 +1,93 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  #replicas: {{ .Values.mq_deployment.replicaCount }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+        name: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+    spec:
+      serviceAccountName: {{ .Values.mq_deployment.serviceAccount }}
+      containers:
+      - name: {{ template "fullname" . }}
+        #image: master.cfc:8500/mq/mq:latest
+        image: "{{ .Values.mq_deployment.image.imageName }}:{{ .Values.mq_deployment.image.imageTag }}"
+        ports:
+          - containerPort: 1414
+          {{- with .Values.mq_deployment }}
+          {{- range .additional_mqports }}
+          - containerPort: {{ . }}
+          {{- end }}
+          {{- end }}
+          - containerPort: 9443
+        imagePullPolicy: {{ .Values.mq_deployment.image.pullPolicy }}
+        volumeMounts:
+        - name: {{ template "fullname" . }}-pv
+          mountPath: /mnt/mqm
+          #mountPath: /mqm
+        env:
+        - name: LICENSE
+          value: "accept"
+        - name: MQ_QMGR_NAME
+          value: "QM1"
+        - name: MQ_APP_PASSWORD
+          value: "app"
+        #lifecycle:
+        #  postStart:
+        #    exec:
+        #      command:
+        #        - "/bin/sh"
+        #        - "-ec"
+        #        - |
+        #          authorize_qm1()
+        #          {
+        #             echo "Authorizing app to use QM1 ..."
+        #             dspmqaut -m QM1 -t qmgr -p app
+        #             setmqaut -m QM1  -t qmgr -p app +all
+        #             dspmqaut -m QM1 -t qmgr -p app
+        #          }
+        #
+        #          disable_channel_auth()
+        #          {
+        #             echo "Disabling channel authorization (non-prod only) ..."
+        #             echo "ALTER QMGR CHLAUTH(DISABLED)" | runmqsc $1
+        #         }
+        #
+        #          authorize_queues_to_app()
+        #          {
+        #             echo "Authorizing app to use QM1 queues ..."
+        #             setmqaut -m QM1 -n DEV.QUEUE.1 -t queue -p app +all
+        #             setmqaut -m QM1 -n DEV.QUEUE.2 -t queue -p app +all
+        #             setmqaut -m QM1 -n DEV.QUEUE.3 -t queue -p app +all
+        #             dspmqaut -m QM1 -n DEV.QUEUE.1 -t queue -p app
+        #             dspmqaut -m QM1 -n DEV.QUEUE.2 -t queue -p app
+        #             dspmqaut -m QM1 -n DEV.QUEUE.3 -t queue -p app
+        #          
+        #          }
+        #          
+        #          addnl_config()
+        #          {
+        #             authorize_qm1
+        #             disable_channel_auth
+        #             authorize_queues_to_app
+        #          }
+        #
+        #          addnl_config
+      imagePullSecrets:
+         - name: {{ .Release.Namespace }}.registrykey
+      volumes:
+      - name: {{ template "fullname" . }}-pv
+        persistentVolumeClaim:
+          claimName: {{ template "fullname" . }}-pv-claim

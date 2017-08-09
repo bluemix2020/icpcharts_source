@@ -1,4 +1,4 @@
-name: stolon
+name: postgres_statefulset
 home: https://github.com/sorintlab/stolon
 version: 0.1.1
 description: Stolon Helm Chart for Kubernetes.

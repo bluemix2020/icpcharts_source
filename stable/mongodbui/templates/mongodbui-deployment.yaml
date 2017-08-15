@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.mongodbui_deployment.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+        name: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "{{ .Values.mongodbui_deployment.image.imageName }}:{{ .Values.mongodbui_deployment.image.imageTag }}"
+        ports:
+          - containerPort: 8888
+        imagePullPolicy: {{ .Values.mongodbui_deployment.image.pullPolicy }}
+        env:
+        - name: ME_CONFIG_MONGODB_SERVER
+          value: "mongodb-mongodb-replicaset-0.mongodb-mongodb-replicaset.mongodb.svc.cluster.local"

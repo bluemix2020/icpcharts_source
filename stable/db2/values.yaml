@@ -1,0 +1,20 @@
+# Default values for db2.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+image:
+  repository: na.cumulusrepo.com/db2dg/db2server
+  tag: v11.1.2fp2_nonroot
+  pullPolicy: IfNotPresent 
+  secret: eyJuYS5jdW11bHVzcmVwby5jb20iOnsidXNlcm5hbWUiOiJ0b2tlbiIsInBhc3N3b3JkIjoiNmU1YzRiYmI0NTc3NmY5NWQxOTNhMWZjODYwZTY4MDUiLCJlbWFpbCI6ImlkZWxpZGphQGNhLmlibS5jb20iLCJhdXRoIjoiZEc5clpXNDZObVUxWXpSaVltSTBOVGMzTm1ZNU5XUXhPVE5oTVdaak9EWXdaVFk0TURVPSJ9fQ==
+service:
+  name: db2
+  type: NodePort
+  externalPort: 50000
+  internalPort: 50000
+storage:
+  class: fast
+  size: 5Gi
+db2inst:
+  instname: db2inst1
+  password: password
+license: "accept"

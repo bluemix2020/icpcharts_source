@@ -1,0 +1,13 @@
+# Default values for pgweb
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+wast_deployment:
+  # Only one replica allowed
+  replicaCount: 1
+  image:
+    imageName: ibmcom/websphere-traditional
+    imageTag: 9.0.0.4-profile
+    pullPolicy: IfNotPresent
+
+wast_service:
+  serviceType: NodePort

@@ -1,0 +1,13 @@
+# Default values for ucda
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+ucda_deployment:
+  # Only one replica allowed
+  replicaCount: 1
+  image:
+    imageName: ibmcom/ucda
+    imageTag: latest
+    pullPolicy: IfNotPresent
+
+ucda_service:
+  serviceType: NodePort

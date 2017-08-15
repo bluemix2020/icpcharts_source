@@ -1,0 +1,11 @@
+apiVersion: v1
+name: wast
+description: wast is a kubernetes deployment of the WAS Traditional Image
+version: 0.1.1
+appVersion: 9.0.1.0
+home: https://hub.docker.com/r/ibmcom/websphere-traditional/
+sources:
+- https://hub.docker.com/r/ibmcom/websphere-traditional/
+maintainers:
+- name: xxyy
+  email: xxyy@xxyy.com

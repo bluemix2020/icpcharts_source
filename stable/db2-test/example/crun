@@ -1,0 +1,1 @@
+java -cp .:db2jcc.jar DB2Test 169.47.43.188:32318/sample db2inst1 password

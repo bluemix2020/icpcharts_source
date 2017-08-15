@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.wast_deployment.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+        name: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "{{ .Values.wast_deployment.image.imageName }}:{{ .Values.wast_deployment.image.imageTag }}"
+        env:
+        - name: UPDATE_HOSTNAME
+          value: "true"
+        ports:
+          - containerPort: 9043
+          - containerPort: 9060
+          - containerPort: 9080
+          - containerPort: 9443
+        imagePullPolicy: {{ .Values.wast_deployment.image.pullPolicy }}
+        volumeMounts:
+          - name: config-volume
+            mountPath: /tmp
+      volumes:
+      - name: config-volume
+        configMap:
+          # Provide the name of the ConfigMap containing the files you want
+          # to add to the container
+          name: wast-adminpassword

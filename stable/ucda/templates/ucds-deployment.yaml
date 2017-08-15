@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.ucda_deployment.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+        name: {{ template "fullname" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "{{ .Values.ucda_deployment.image.imageName }}:{{ .Values.ucda_deployment.image.imageTag }}"
+        #args: 
+        #  - "/tmp/startAgent.sh --addhost=ucd-server:ucds-ucds.ucds"
+        #env:
+        #- name: UPDATE_HOSTNAME
+          #value: "true"
+        #ports:
+        #  - containerPort: 8443
+        #  - containerPort: 7918
+        #  - containerPort: 8080
+        imagePullPolicy: {{ .Values.ucda_deployment.image.pullPolicy }}
+        volumeMounts:
+          - name: local-host
+            mountPath: /mnt/hostFS
+      volumes:
+      - name: local-host
+        emptyDir: {}
+      #  configMap:
+      #    # Provide the name of the ConfigMap containing the files you want
+      #    # to add to the container
+      #    name: wast-adminpassword

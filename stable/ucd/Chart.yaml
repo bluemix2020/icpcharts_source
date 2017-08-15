@@ -1,0 +1,11 @@
+apiVersion: v1
+name: ucds
+description: ucds is a kubernetes deployment of the Urban Code Deploy image
+version: 0.1.1
+appVersion: 9.0.1.0
+home: https://hub.docker.com/r/ibmcom/ucds/
+sources:
+- https://hub.docker.com/r/ibmcom/ucds/
+maintainers:
+- name: xxyy
+  email: xxyy@xxyy.com
